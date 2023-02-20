@@ -1,15 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shop/src/models/product_list.dart';
 import 'package:shop/src/views/homepage/components/product_item.dart';
-import 'package:shop/src/data/dummy_data.dart';
 import 'package:shop/src/models/product.dart';
 
 class ProductsOverviewScreen extends StatelessWidget {
-  final List<Product> loadedProducts = DummyProducts;
-
   ProductsOverviewScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // -------------------------------------------------------------------------
+
+    // Primeiro estou obtendo o Provider
+    final provider = Provider.of<ProductList>(context);
+
+    // Obter a lista de produtor a partir do Provider
+    // Entao ele vai pegar o método getter e trazer a lista de itens
+    final List<Product> loadedProducts = provider.items;
+    // -------------------------------------------------------------------------
     return Scaffold(
       appBar: AppBar(
         title: const Center(

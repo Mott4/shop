@@ -15,23 +15,27 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         footer: GridTileBar(
           backgroundColor: Colors.black87,
+
           // antes do titulo ---------------------------------------------------
           leading: IconButton(
             onPressed: () {},
             icon: const Icon(Icons.favorite),
             color: Theme.of(context).hintColor,
           ),
+
           // titulo ------------------------------------------------------------
           title: Text(
             product.title,
             textAlign: TextAlign.center,
           ),
+
           // depois do titulo --------------------------------------------------
           trailing: IconButton(
             onPressed: () {},
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).hintColor,
           ),
+          //
         ),
         child: GestureDetector(
           child: Image.network(
