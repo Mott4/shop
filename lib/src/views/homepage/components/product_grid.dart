@@ -8,32 +8,35 @@ class ProductGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // -------------------------------------------------------------------------
-    // Primeiro estou obtendo o Provider
+    // Primeiro estou obtendo o Provider.
     final provider = Provider.of<ProductList>(context);
 
     // Obter a lista de produtor a partir do Provider
-    // Entao ele vai pegar o método getter e trazer a lista de itens
+    // Entao ele vai pegar o método getter e trazer a lista de itens.
     final List<Product> loadedProducts = provider.items;
     // -------------------------------------------------------------------------
     return GridView.builder(
       padding: const EdgeInsets.all(10),
-      itemBuilder: (ctx, i) => ProductItem(product: loadedProducts[i]),
+      itemBuilder: (ctx, i) => ChangeNotifierProvider(
+        create: (_) => loadedProducts[i],
+        child: ProductItem(),
+      ),
 
       itemCount: loadedProducts.length,
-      // dizer q quantidade de itens que ele vai renderizar
+      // dizer q quantidade de itens que ele vai renderizar.
 
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        // exibir tantos produtos por linha
+        // exibir tantos produtos por linha.
 
         childAspectRatio: 3 / 2,
         // quer dizer que ele tem um aspectRatio no tamanho de 1.5
 
         crossAxisSpacing: 10,
-        // espaçamento no eixo vertical
+        // espaçamento no eixo vertical.
 
         mainAxisSpacing: 10,
-        // espaçamento no eixo horizontal
+        // espaçamento no eixo horizontal.
       ),
     );
   }
