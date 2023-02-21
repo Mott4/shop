@@ -10,6 +10,8 @@ class ProductsOverviewScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // USANDO GERENCIAMENTO DE ESTADO EM **GLOBAL**
+
     final provider = Provider.of<ProductList>(context);
     return Scaffold(
       appBar: AppBar(
