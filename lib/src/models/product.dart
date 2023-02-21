@@ -14,12 +14,13 @@ class Product with ChangeNotifier {
     required this.description,
     required this.price,
     required this.imageUrl,
+    this.isFavorite = false,
   });
 
 // Methods
 
   void toggleFavorite() {
-    isFavorite = isFavorite == false;
+    isFavorite = !isFavorite!;
     notifyListeners();
   }
 }
