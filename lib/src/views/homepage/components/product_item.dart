@@ -6,7 +6,12 @@ import 'package:shop/src/models/product.dart';
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final product = Provider.of<Product>(context);
+    final product = Provider.of<Product>(
+      context,
+      listen: true,
+      // se eu estiver lidando com dados que sao imutaveis, posso usar o
+      // listen: false quando nao preciso refletir na interface gráfica
+    );
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -20,7 +25,8 @@ class ProductItem extends StatelessWidget {
               product.toggleFavorite();
             },
             icon: Icon(
-                product.isFavorite! ? Icons.favorite : Icons.favorite_border),
+              product.isFavorite! ? Icons.favorite : Icons.favorite_border,
+            ),
             color: Theme.of(context).hintColor,
           ),
 
