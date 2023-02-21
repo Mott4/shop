@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/src/core/config/routes/routes.dart';
+import 'package:shop/src/models/cart.dart';
 import 'package:shop/src/models/product.dart';
 
 class ProductItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
     //listen: true,
     // se eu estiver lidando com dados que sao imutaveis, posso usar o
     // listen: false quando nao preciso refletir na interface gráfica
@@ -41,7 +43,9 @@ class ProductItem extends StatelessWidget {
 
           // depois do titulo --------------------------------------------------
           trailing: IconButton(
-            onPressed: () {},
+            onPressed: () {
+              cart.addItem(product);
+            },
             icon: const Icon(Icons.shopping_cart),
             color: Theme.of(context).hintColor,
           ),
