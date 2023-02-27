@@ -6,6 +6,8 @@ import 'package:shop/src/models/product_list.dart';
 import 'package:shop/src/views/detailspage/product_detail_page.dart';
 import 'package:shop/src/views/homepage/products_overview_screen.dart';
 
+import 'src/views/cartpage/cart_page.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -27,9 +29,10 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.purple,
           fontFamily: 'Lato',
         ),
-        home: ProductsOverviewScreen(),
+        home: const ProductsOverviewScreen(),
         routes: {
           AppRoutes.PRODUCT_DETAIL: (ctx) => const ProductDetailPage(),
+          AppRoutes.cartPage: (ctx) => const CartPage(),
         },
         debugShowCheckedModeBanner: false,
       ),

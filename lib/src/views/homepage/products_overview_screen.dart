@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop/src/core/config/routes/routes.dart';
 import 'package:shop/src/models/cart.dart';
 import 'package:shop/src/models/product_list.dart';
 import 'package:shop/src/views/homepage/components/product_grid.dart';
@@ -46,7 +47,9 @@ class ProductsOverviewScreen extends StatelessWidget {
           // -------------------------------------------------------------------
           Consumer<Cart>(
             child: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.cartPage);
+              },
               icon: const Icon(Icons.shopping_cart),
             ),
             builder: (ctx, cart, child) => BadgeCart(
@@ -56,7 +59,7 @@ class ProductsOverviewScreen extends StatelessWidget {
           ),
         ],
 
-        // -------------------------------------------------------------------
+        // ---------------------------------------------------------------------
       ),
       body: ProductGrid(),
     );
