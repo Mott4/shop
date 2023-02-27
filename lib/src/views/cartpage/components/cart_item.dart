@@ -11,6 +11,28 @@ class CartItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(cartItem.name);
+    return Card(
+      margin: const EdgeInsets.symmetric(
+        horizontal: 15,
+        vertical: 6,
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(6),
+        child: ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).primaryColor,
+            child: Padding(
+              padding: const EdgeInsets.all(5),
+              child: FittedBox(
+                child: Text('${cartItem.price}'),
+              ),
+            ),
+          ),
+          subtitle: Text('Total: R\$${cartItem.price * cartItem.quantity}'),
+          title: Text(cartItem.name),
+          trailing: Text('${cartItem.quantity}'),
+        ),
+      ),
+    );
   }
 }
