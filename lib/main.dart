@@ -19,8 +19,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => ProductList()),
-        ChangeNotifierProvider(create: (_) => Cart()),
+        ChangeNotifierProvider(
+          create: (_) => ProductList(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Cart(),
+        ),
       ],
       child: MaterialApp(
         title: 'Shop App',
@@ -31,7 +35,7 @@ class MyApp extends StatelessWidget {
         ),
         home: const ProductsOverviewScreen(),
         routes: {
-          AppRoutes.PRODUCT_DETAIL: (ctx) => const ProductDetailPage(),
+          AppRoutes.productDetailPage: (ctx) => const ProductDetailPage(),
           AppRoutes.cartPage: (ctx) => const CartPage(),
         },
         debugShowCheckedModeBanner: false,

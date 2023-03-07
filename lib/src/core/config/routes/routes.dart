@@ -3,7 +3,7 @@ import 'package:shop/src/views/cartpage/cart_page.dart';
 import 'package:shop/src/views/homepage/products_overview_screen.dart';
 
 class AppRoutes {
-  static const PRODUCT_DETAIL = '/product-detail';
+  //static const String productDetail = '/product-detail';
 
   // Rotas Nomeadas estáticas
   static const String productsOverviewScreen = '/productsOverviewScreen';
