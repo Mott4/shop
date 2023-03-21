@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:shop/src/core/config/routes/routes.dart';
 import 'package:shop/src/models/cart.dart';
 import 'package:shop/src/models/product_list.dart';
+import 'package:shop/src/views/homepage/components/app_drawer.dart';
 import 'package:shop/src/views/homepage/components/product_grid.dart';
 
 import 'components/bagde_cart.dart';
@@ -62,6 +63,7 @@ class ProductsOverviewScreen extends StatelessWidget {
         // ---------------------------------------------------------------------
       ),
       body: ProductGrid(),
+      drawer: AppDrawer(),
     );
   }
 }

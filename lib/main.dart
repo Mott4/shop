@@ -8,6 +8,7 @@ import 'package:shop/src/views/detailspage/product_detail_page.dart';
 import 'package:shop/src/views/homepage/products_overview_screen.dart';
 
 import 'src/views/cartpage/cart_page.dart';
+import 'src/views/orderpage/order_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,8 +38,10 @@ class MyApp extends StatelessWidget {
         ),
         home: const ProductsOverviewScreen(),
         routes: {
+          AppRoutes.productsOverviewScreen: (ctx) => const ProductsOverviewScreen(),
           AppRoutes.productDetailPage: (ctx) => const ProductDetailPage(),
           AppRoutes.cartPage: (ctx) => const CartPage(),
+          AppRoutes.ordersPage: (ctx) => const OrdersPage(),
         },
         debugShowCheckedModeBanner: false,
       ),
