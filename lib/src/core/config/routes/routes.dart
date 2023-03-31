@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shop/src/views/cartpage/cart_page.dart';
-import 'package:shop/src/views/homepage/products_overview_screen.dart';
-import 'package:shop/src/views/orderpage/order_page.dart';
+import 'package:shop/src/pages/cartpage/cart_page.dart';
+import 'package:shop/src/pages/homepage/products_overview_screen.dart';
+import 'package:shop/src/pages/orderpage/order_page.dart';
 
 class AppRoutes {
   //static const String productDetail = '/product-detail';

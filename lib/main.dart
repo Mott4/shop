@@ -4,11 +4,11 @@ import 'package:shop/src/core/config/routes/routes.dart';
 import 'package:shop/src/models/cart.dart';
 import 'package:shop/src/models/order_list.dart';
 import 'package:shop/src/models/product_list.dart';
-import 'package:shop/src/views/detailspage/product_detail_page.dart';
-import 'package:shop/src/views/homepage/products_overview_screen.dart';
+import 'package:shop/src/pages/detailspage/product_detail_page.dart';
+import 'package:shop/src/pages/homepage/products_overview_screen.dart';
 
-import 'src/views/cartpage/cart_page.dart';
-import 'src/views/orderpage/order_page.dart';
+import 'src/pages/cartpage/cart_page.dart';
+import 'src/pages/orderpage/order_page.dart';
 
 void main() {
   runApp(const MyApp());
