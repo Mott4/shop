@@ -26,35 +26,41 @@ class Cart with ChangeNotifier {
 
   // Metods ====================================================================
   void addItem(Product product) {
-    if (_items.containsKey(product)) {
+    if (_items.containsKey(product.id)) {
       _items.update(
-          product.id,
-          (existingItem) => CartItem(
-              id: existingItem.id,
-              productId: existingItem.productId,
-              name: existingItem.name,
-              quantity: existingItem.quantity + 1,
-              price: existingItem.price));
+        product.id,
+        (existingItem) => CartItem(
+            id: existingItem.id,
+            productId: existingItem.productId,
+            name: existingItem.name,
+            quantity: existingItem.quantity + 1,
+            price: existingItem.price),
+      );
     } else {
       _items.putIfAbsent(
-          product.id,
-          () => CartItem(
-              id: Random().toString(),
-              productId: product.id,
-              name: product.name,
-              quantity: 1,
-              price: product.price));
+        product.id,
+        () => CartItem(
+          id: Random().nextDouble().toString(),
+          productId: product.id,
+          name: product.name,
+          quantity: 1,
+          price: product.price,
+        ),
+      );
+      print("adicionando item ${product}");
     }
     notifyListeners();
   }
 
   void removeItem(String productId) {
     _items.remove(productId);
+    print('removendo item');
     notifyListeners();
   }
 
   void clear() {
     _items = {};
+    print('limpando itens');
     notifyListeners();
   }
 }

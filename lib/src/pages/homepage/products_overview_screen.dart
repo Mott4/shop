@@ -21,6 +21,7 @@ class ProductsOverviewScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Row(children: const [Text('Minha Loja')]),
+        elevation: 0,
         actions: [
           // -------------------------------------------------------------------
 
@@ -63,7 +64,7 @@ class ProductsOverviewScreen extends StatelessWidget {
         // ---------------------------------------------------------------------
       ),
       body: ProductGrid(),
-      drawer: AppDrawer(),
+      drawer: const AppDrawer(),
     );
   }
 }

@@ -31,17 +31,13 @@ class CartPage extends StatelessWidget {
                   const SizedBox(width: 10),
                   Chip(
                     backgroundColor: Theme.of(context).primaryColor,
-                    label: Text('R\$${cart.totalAmount}',
-                        style: const TextStyle(color: Colors.white)),
+                    label: Text('R\$${cart.totalAmount}', style: const TextStyle(color: Colors.white)),
                   ),
                   const Spacer(),
                   TextButton(
-                    child: const Text(
-                      'COMPRAR',
-                    ),
+                    child: const Text('COMPRAR'),
                     onPressed: () {
-                      Provider.of<OrderList>(context, listen: false)
-                          .addOrder(cart);
+                      Provider.of<OrderList>(context, listen: false).addOrder(cart);
 
                       cart.clear();
                     },

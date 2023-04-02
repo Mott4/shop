@@ -19,23 +19,23 @@ class ProductGrid extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
         value: loadedProducts[i],
-        child: ProductItem(),
+        child: const ProductItem(),
       ),
 
       itemCount: loadedProducts.length,
       // dizer q quantidade de itens que ele vai renderizar.
 
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+        crossAxisCount: 1,
         // exibir tantos produtos por linha.
 
         childAspectRatio: 3 / 2,
         // quer dizer que ele tem um aspectRatio no tamanho de 1.5
 
-        crossAxisSpacing: 10,
+        crossAxisSpacing: 20,
         // espaçamento no eixo vertical.
 
-        mainAxisSpacing: 10,
+        mainAxisSpacing: 20,
         // espaçamento no eixo horizontal.
       ),
     );

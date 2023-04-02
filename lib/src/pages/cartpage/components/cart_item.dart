@@ -13,6 +13,8 @@ class CartItemWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final product = Provider.of<Cart>(context);
+
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
@@ -45,12 +47,12 @@ class CartItemWidget extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(5),
                 child: FittedBox(
-                  child: Text('${cartItem.price}'),
+                  child: Text('${cartItem.price * cartItem.quantity}'),
                 ),
               ),
             ),
-            subtitle: Text('Total: R\$${cartItem.price * cartItem.quantity}'),
             title: Text(cartItem.name),
+            subtitle: Text('Total: R\$${cartItem.price * cartItem.quantity}'),
             trailing: Text('${cartItem.quantity}x'),
           ),
         ),
