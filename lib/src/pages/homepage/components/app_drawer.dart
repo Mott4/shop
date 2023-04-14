@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop/src/core/config/routes/routes.dart';
+import 'package:shop/src/pages/homepage/components/custom_list_tile.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({super.key});
@@ -10,23 +11,30 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: [
           AppBar(
-            title: const Text('Bem vindo Usuário'),
+            title: const Text('Bem vindo, Usuário'),
             automaticallyImplyLeading: false,
           ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.shop),
-            title: const Text('Loja'),
+          CustomListTile(
+            icon: Icons.shop,
+            text: 'Loja',
             onTap: () {
               Navigator.of(context).pushReplacementNamed(AppRoutes.productsOverviewScreen);
             },
           ),
           const Divider(),
-          ListTile(
-            leading: const Icon(Icons.payment),
-            title: const Text('Pedidos'),
+          CustomListTile(
+            icon: Icons.payment,
+            text: 'Pedidos',
             onTap: () {
               Navigator.of(context).pushReplacementNamed(AppRoutes.ordersPage);
+            },
+          ),
+          const Divider(),
+          CustomListTile(
+            icon: Icons.edit,
+            text: 'Gerenciar Produtos',
+            onTap: () {
+              Navigator.of(context).pushReplacementNamed(AppRoutes.productsPage);
             },
           ),
         ],

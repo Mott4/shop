@@ -16,6 +16,10 @@ class ProductList with ChangeNotifier {
     return [..._items];
   }
 
+  int get itemsCount {
+    return _items.length;
+  }
+
   // Metods ====================================================================
   void showFavoriteOnly() {
     _showFavoriteOnly = true;

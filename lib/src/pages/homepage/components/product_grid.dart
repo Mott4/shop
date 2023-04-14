@@ -26,7 +26,7 @@ class ProductGrid extends StatelessWidget {
       // dizer q quantidade de itens que ele vai renderizar.
 
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 1,
+        crossAxisCount: 2,
         // exibir tantos produtos por linha.
 
         childAspectRatio: 3 / 2,
