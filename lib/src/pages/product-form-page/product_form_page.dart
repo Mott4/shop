@@ -1,7 +1,9 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:shop/src/models/product.dart';
+import 'package:shop/src/models/product_list.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -56,17 +58,11 @@ class _ProductFormPageState extends State<ProductFormPage> {
       return;
     }
 
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      name: _formData['name'] as String,
-      description: _formData['description'] as String,
-      price: _formData['price'] as double,
-      imageUrl: _formData['imageUrl'] as String,
-    );
-
-    print(newProduct.id);
-    print(newProduct.name);
-    print(newProduct.price);
+    Provider.of<ProductList>(
+      context,
+      listen: false,
+    ).addProductFromData(_formData);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -157,10 +153,11 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 keyboardType: const TextInputType.numberWithOptions(decimal: true),
                 onSaved: (price) => _formData['price'] = double.parse(price ?? '0'),
                 validator: (_price) {
-                  final price = _price ?? '';
+                  final priceString = _price ?? '';
+                  final price = double.tryParse(priceString) ?? -1;
 
-                  if (price.toString().isEmpty) {
-                    return 'O valor não pode ser 0.';
+                  if (price <= 0) {
+                    return 'Informe um preço válido';
                   }
 
                   return null;
@@ -177,6 +174,15 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 maxLines: 3,
                 onFieldSubmitted: (_) {
                   submitForm();
+                },
+                validator: (_description) {
+                  final description = _description ?? '';
+
+                  if (description.trim().isEmpty) {
+                    return 'A descrição precisa ter no mínimo 10 letras.';
+                  }
+
+                  return null;
                 },
                 onSaved: (description) => _formData['description'] = description ?? '',
               ),
