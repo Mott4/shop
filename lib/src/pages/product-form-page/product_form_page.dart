@@ -1,9 +1,9 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shop/src/models/product.dart';
 import 'package:shop/src/models/product_list.dart';
+import 'package:shop/src/pages/product-form-page/components/custom_text_form_field.dart';
 
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
@@ -30,6 +30,25 @@ class _ProductFormPageState extends State<ProductFormPage> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_formData.isEmpty) {
+      final arg = ModalRoute.of(context)?.settings.arguments;
+
+      if (arg != null) {
+        final product = arg as Product;
+        _formData['id'] = product.id;
+        _formData['name'] = product.name;
+        _formData['price'] = product.price;
+        _formData['description'] = product.description;
+
+        _imageURLController.text = product.imageUrl;
+      }
+    }
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _priceFocus.dispose();
@@ -42,7 +61,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
   bool isValidImageUrl(String url) {
     bool isValidUrl = Uri.tryParse(url)?.hasAbsolutePath ?? false;
 
-    bool endsWithFile = url.toLowerCase().endsWith('.png') || url.toLowerCase().endsWith('.') || url.toLowerCase().endsWith('.jpeg');
+    bool endsWithFile = url.toLowerCase().endsWith('.png') || url.toLowerCase().endsWith('.') || url.toLowerCase().endsWith('.jpg');
 
     return isValidUrl && endsWithFile;
   }
@@ -58,10 +77,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
       return;
     }
 
+    _formKey.currentState?.save();
+
     Provider.of<ProductList>(
       context,
       listen: false,
-    ).addProductFromData(_formData);
+    ).saveProduct(_formData);
     Navigator.of(context).pop();
   }
 
@@ -70,7 +91,12 @@ class _ProductFormPageState extends State<ProductFormPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Formulário de Produto'),
-        actions: [IconButton(onPressed: submitForm, icon: const Icon(Icons.save))],
+        actions: [
+          IconButton(
+            onPressed: submitForm,
+            icon: const Icon(Icons.save),
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(15),
@@ -84,6 +110,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 children: [
                   Expanded(
                     child: TextFormField(
+                      initialValue: _formData['imageUrl']?.toString(),
                       textInputAction: TextInputAction.next,
                       controller: _imageURLController,
                       decoration: const InputDecoration(
@@ -122,7 +149,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
                 ],
               ),
               // Nome ----------------------------------------------------------
+
               TextFormField(
+                initialValue: _formData['name']?.toString(),
                 decoration: const InputDecoration(
                   labelText: 'Nome',
                   labelStyle: TextStyle(color: Colors.black),
@@ -144,6 +173,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
               ),
               // Preço ---------------------------------------------------------
               TextFormField(
+                initialValue: _formData['price']?.toString(),
                 focusNode: _priceFocus,
                 decoration: const InputDecoration(
                   labelText: 'Preço',
@@ -165,6 +195,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
               ),
               // Descrição -----------------------------------------------------
               TextFormField(
+                initialValue: _formData['description']?.toString(),
                 textInputAction: TextInputAction.done,
                 decoration: const InputDecoration(
                   labelText: 'Descrição',
