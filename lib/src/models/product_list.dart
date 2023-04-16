@@ -1,11 +1,15 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:shop/src/data/dummy_data.dart';
 import 'package:shop/src/models/product.dart';
 
 class ProductList with ChangeNotifier {
   final List<Product> _items = DummyProducts;
+
+  final _baseUrl = 'https://shop-project-c9355-default-rtdb.firebaseio.com';
 
   bool _showFavoriteOnly = false;
 
@@ -69,7 +73,21 @@ class ProductList with ChangeNotifier {
     }
   }
 
+// Conectando com o Banco de Dados FIREBASE
   void addProduct(Product product) {
+    http.post(
+      Uri.parse('$_baseUrl/products.json'),
+      body: jsonEncode(
+        {
+          "name": product.name,
+          "description": product.description,
+          "price": product.price,
+          "imageUrl": product.imageUrl,
+          "isFavorite": product.isFavorite,
+        },
+      ),
+    );
+
     _items.add(product);
     notifyListeners();
     // ^^^ notificar os interessados para quando eu adicionar novos itens para

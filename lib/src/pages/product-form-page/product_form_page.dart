@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:provider/provider.dart';
 import 'package:shop/src/models/product.dart';
 import 'package:shop/src/models/product_list.dart';
 import 'package:shop/src/pages/product-form-page/components/custom_text_form_field.dart';
