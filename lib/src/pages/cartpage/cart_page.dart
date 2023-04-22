@@ -34,14 +34,7 @@ class CartPage extends StatelessWidget {
                     label: Text('R\$${cart.totalAmount}', style: const TextStyle(color: Colors.white)),
                   ),
                   const Spacer(),
-                  TextButton(
-                    child: const Text('COMPRAR'),
-                    onPressed: () {
-                      Provider.of<OrderList>(context, listen: false).addOrder(cart);
-
-                      cart.clear();
-                    },
-                  ),
+                  CartButton(cart: cart),
                 ],
               ),
             ),
@@ -55,5 +48,44 @@ class CartPage extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+class CartButton extends StatefulWidget {
+  const CartButton({
+    super.key,
+    required this.cart,
+  });
+
+  final Cart cart;
+
+  @override
+  State<CartButton> createState() => _CartButtonState();
+}
+
+class _CartButtonState extends State<CartButton> {
+  bool isLoading = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return isLoading
+        ? const CircularProgressIndicator()
+        : TextButton(
+            child: const Text('COMPRAR'),
+            onPressed: widget.cart.itemsCount == 0
+                ? null
+                : () async {
+                    setState(() => isLoading = true);
+
+                    await Provider.of<OrderList>(
+                      context,
+                      listen: false,
+                    ).addOrder(widget.cart);
+
+                    widget.cart.clear();
+
+                    setState(() => isLoading = false);
+                  },
+          );
   }
 }
