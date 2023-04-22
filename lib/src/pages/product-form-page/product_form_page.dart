@@ -4,6 +4,8 @@ import 'package:shop/src/models/product.dart';
 import 'package:shop/src/models/product_list.dart';
 import 'package:shop/src/pages/product-form-page/components/custom_text_form_field.dart';
 
+final _formKey = GlobalKey<FormState>();
+
 class ProductFormPage extends StatefulWidget {
   const ProductFormPage({super.key});
 
@@ -18,9 +20,9 @@ class _ProductFormPageState extends State<ProductFormPage> {
   final _imageURLFocus = FocusNode();
   final _imageURLController = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>();
-
   final _formData = Map<String, Object>();
+
+  bool isLoading = false;
 
   @override
   void initState() {
@@ -69,7 +71,7 @@ class _ProductFormPageState extends State<ProductFormPage> {
     setState(() {});
   }
 
-  void submitForm() {
+  Future<void> submitForm() async {
     final isValid = _formKey.currentState?.validate() ?? false;
 
     if (!isValid) {
@@ -78,13 +80,37 @@ class _ProductFormPageState extends State<ProductFormPage> {
 
     _formKey.currentState?.save();
 
-    Provider.of<ProductList>(
-      context,
-      listen: false,
-    ).saveProduct(_formData);
-    Navigator.of(context).pop();
+    setState(() => isLoading = true);
+
+    try {
+      await Provider.of<ProductList>(
+        context,
+        listen: false,
+      ).saveProduct(_formData);
+
+      Navigator.of(context).pop();
+    } catch (error) {
+      await showDialog<void>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Ocorreu um erro!'),
+          content: const Text('Ocorreu um erro ao salvar o produto.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    } finally {
+      setState(() => isLoading = false);
+    }
   }
 
+// -----------------------------------------------------------------------------
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -97,129 +123,126 @@ class _ProductFormPageState extends State<ProductFormPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(15),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              // Imagem --------------------------------------------------------
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Expanded(
-                    child: TextFormField(
-                      initialValue: _formData['imageUrl']?.toString(),
-                      textInputAction: TextInputAction.next,
-                      controller: _imageURLController,
+      body: isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(15),
+              child: Form(
+                key: _formKey,
+                child: ListView(
+                  children: [
+                    // Imagem --------------------------------------------------------
+                    Row(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Expanded(
+                          child: TextFormField(
+                            textInputAction: TextInputAction.next,
+                            controller: _imageURLController,
+                            decoration: const InputDecoration(
+                              labelText: 'URL da Imagem',
+                              labelStyle: TextStyle(color: Colors.black),
+                            ),
+                            focusNode: _imageURLFocus,
+                            onFieldSubmitted: (_) {
+                              FocusScope.of(context).requestFocus(_imageURLFocus);
+                            },
+                            onSaved: (imageUrl) => _formData['imageUrl'] = imageUrl ?? '',
+                            validator: (_imageUrl) {
+                              final imageUrl = _imageUrl ?? '';
+
+                              if (!isValidImageUrl(imageUrl)) {
+                                return 'Informe uma Url válida.';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          height: 100,
+                          width: 100,
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey, width: 1),
+                          ),
+                          alignment: Alignment.center,
+                          child: _imageURLController.text.isEmpty ? const Text('Informe o URL') : Image.network(_imageURLController.text),
+                        ),
+                      ],
+                    ),
+                    // Nome ----------------------------------------------------------
+
+                    TextFormField(
+                      initialValue: _formData['name']?.toString(),
                       decoration: const InputDecoration(
-                        labelText: 'URL da Imagem',
+                        labelText: 'Nome',
                         labelStyle: TextStyle(color: Colors.black),
                       ),
-                      focusNode: _imageURLFocus,
+                      textInputAction: TextInputAction.next,
                       onFieldSubmitted: (_) {
-                        FocusScope.of(context).requestFocus(_imageURLFocus);
+                        FocusScope.of(context).requestFocus(_priceFocus);
                       },
-                      onSaved: (imageUrl) => _formData['imageUrl'] = imageUrl ?? '',
-                      validator: (_imageUrl) {
-                        final imageUrl = _imageUrl ?? '';
+                      onSaved: (name) => _formData['name'] = name ?? '',
+                      validator: (_name) {
+                        final name = _name ?? '';
 
-                        if (!isValidImageUrl(imageUrl)) {
-                          return 'Informe uma Url válida.';
+                        if (name.trim().isEmpty) {
+                          return 'Nome é obrigatório';
                         }
+
                         return null;
                       },
                     ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                    height: 100,
-                    width: 100,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey, width: 1),
+                    // Preço ---------------------------------------------------------
+                    TextFormField(
+                      initialValue: _formData['price']?.toString(),
+                      focusNode: _priceFocus,
+                      decoration: const InputDecoration(
+                        labelText: 'Preço',
+                        labelStyle: TextStyle(color: Colors.black),
+                      ),
+                      textInputAction: TextInputAction.next,
+                      keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                      onSaved: (price) => _formData['price'] = double.parse(price ?? '0'),
+                      validator: (_price) {
+                        final priceString = _price ?? '';
+                        final price = double.tryParse(priceString) ?? -1;
+
+                        if (price <= 0) {
+                          return 'Informe um preço válido';
+                        }
+
+                        return null;
+                      },
                     ),
-                    alignment: Alignment.center,
-                    child: _imageURLController.text.isEmpty
-                        ? const Text('Informe o URL')
-                        : FittedBox(
-                            child: Image.network(_imageURLController.text, fit: BoxFit.cover),
-                          ),
-                  ),
-                ],
-              ),
-              // Nome ----------------------------------------------------------
+                    // Descrição -----------------------------------------------------
+                    TextFormField(
+                      initialValue: _formData['description']?.toString(),
+                      textInputAction: TextInputAction.done,
+                      decoration: const InputDecoration(
+                        labelText: 'Descrição',
+                        labelStyle: TextStyle(color: Colors.black),
+                      ),
+                      focusNode: _descriptionFocus,
+                      maxLines: 3,
+                      onFieldSubmitted: (_) {
+                        submitForm();
+                      },
+                      validator: (_description) {
+                        final description = _description ?? '';
 
-              TextFormField(
-                initialValue: _formData['name']?.toString(),
-                decoration: const InputDecoration(
-                  labelText: 'Nome',
-                  labelStyle: TextStyle(color: Colors.black),
+                        if (description.trim().isEmpty) {
+                          return 'A descrição precisa ter no mínimo 10 letras.';
+                        }
+
+                        return null;
+                      },
+                      onSaved: (description) => _formData['description'] = description ?? '',
+                    ),
+                  ],
                 ),
-                textInputAction: TextInputAction.next,
-                onFieldSubmitted: (_) {
-                  FocusScope.of(context).requestFocus(_priceFocus);
-                },
-                onSaved: (name) => _formData['name'] = name ?? '',
-                validator: (_name) {
-                  final name = _name ?? '';
-
-                  if (name.trim().isEmpty) {
-                    return 'Nome é obrigatório';
-                  }
-
-                  return null;
-                },
               ),
-              // Preço ---------------------------------------------------------
-              TextFormField(
-                initialValue: _formData['price']?.toString(),
-                focusNode: _priceFocus,
-                decoration: const InputDecoration(
-                  labelText: 'Preço',
-                  labelStyle: TextStyle(color: Colors.black),
-                ),
-                textInputAction: TextInputAction.next,
-                keyboardType: const TextInputType.numberWithOptions(decimal: true),
-                onSaved: (price) => _formData['price'] = double.parse(price ?? '0'),
-                validator: (_price) {
-                  final priceString = _price ?? '';
-                  final price = double.tryParse(priceString) ?? -1;
-
-                  if (price <= 0) {
-                    return 'Informe um preço válido';
-                  }
-
-                  return null;
-                },
-              ),
-              // Descrição -----------------------------------------------------
-              TextFormField(
-                initialValue: _formData['description']?.toString(),
-                textInputAction: TextInputAction.done,
-                decoration: const InputDecoration(
-                  labelText: 'Descrição',
-                  labelStyle: TextStyle(color: Colors.black),
-                ),
-                focusNode: _descriptionFocus,
-                maxLines: 3,
-                onFieldSubmitted: (_) {
-                  submitForm();
-                },
-                validator: (_description) {
-                  final description = _description ?? '';
-
-                  if (description.trim().isEmpty) {
-                    return 'A descrição precisa ter no mínimo 10 letras.';
-                  }
-
-                  return null;
-                },
-                onSaved: (description) => _formData['description'] = description ?? '',
-              ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 }
