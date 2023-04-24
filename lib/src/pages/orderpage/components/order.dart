@@ -22,7 +22,10 @@ class _OrderWidgetState extends State<OrderWidget> {
       child: Column(
         children: [
           ListTile(
-            title: Text('R\$ ${widget.order.total.toStringAsFixed(2)}'),
+            title: Text(
+              'R\$ ${widget.order.total.toStringAsFixed(2)}',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             subtitle: Text(
               DateFormat('dd/MM/yyyy hh:mm').format(widget.order.date),
             ),
@@ -45,14 +48,8 @@ class _OrderWidgetState extends State<OrderWidget> {
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          product.name,
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          "${product.quantity}x ${product.price}",
-                          style: const TextStyle(fontSize: 18, color: Colors.grey),
-                        ),
+                        Text(product.name, style: const TextStyle(fontSize: 18, color: Colors.grey)),
+                        Text("${product.quantity}x ${product.price}", style: const TextStyle(fontSize: 18, color: Colors.grey)),
                       ],
                     );
                   },

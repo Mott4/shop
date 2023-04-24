@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:http/http.dart' as http;
 
@@ -22,6 +21,35 @@ class OrderList with ChangeNotifier {
   }
 
   // Methods
+
+  Future<void> loadOrders() async {
+    _items.clear();
+
+    final response = await http.get(
+      Uri.parse('${Constants.orders_baseUrl}.json'),
+    );
+    if (response.body == 'null') return;
+    Map<String, dynamic> data = jsonDecode(response.body);
+    data.forEach((orderId, orderData) {
+      _items.add(
+        Order(
+          id: orderId,
+          date: DateTime.parse(orderData['date']),
+          total: orderData['total'],
+          products: (orderData['products'] as List<dynamic>).map((item) {
+            return CartItem(
+              id: item['id'],
+              productId: item['productId'],
+              name: item['name'],
+              quantity: item['quantity'],
+              price: item['price'],
+            );
+          }).toList(),
+        ),
+      );
+    });
+    notifyListeners();
+  }
 
   // mandando para o FIREBASE
   Future<void> addOrder(Cart cart) async {
